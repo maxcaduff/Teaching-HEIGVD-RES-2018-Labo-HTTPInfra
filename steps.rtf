@@ -7,6 +7,7 @@
 \f0\fs24 \cf0 \
 \
 1:   \
+-> make dockerfile + put files in right folder\
 
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker build -t res18/1-static docker-images/1-static/ 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1    \
@@ -14,17 +15,59 @@
 
 \f1\fs22 \cf3 \cb0 \CocoaLigature0  docker run -p 2345:80 res18/1-static 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+access site: {\field{\*\fldinst{HYPERLINK "http://demo.res.ch:2345/"}}{\fldrslt http://demo.res.ch:2345/}}  (needs "192.168.99.100 demo.res.ch" in /etc/hosts)\
+interactive bash:\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker restart tender_boyd 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1  (name of the container created)  \
-interactive bash:\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f1\fs22 \cf3 \cb0 \CocoaLigature0  docker exec -it tender_boyd /bin/bash 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1   (use existing container)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -i -p 2345:80 res18/1-static /bin/bash 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1  (will create new container.)\
-\
+conf under:   
+\fs22 \expnd0\expndtw0\kerning0
+/var/lib/apache2/conf
+\fs24 \kerning1\expnd0\expndtw0 \
 \
 2:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf0 \ul \ulc0 node / express app:\ulnone \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 from src folder:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 npm init 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 npm install --save chance 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 npm install --save express 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 -> code in index.js\
+->make dockerfile\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker build -t res18/2-dynamic docker-images/2-dynamic/ 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf3 \cb0 \CocoaLigature0  docker run -p 3456:3000 res18/2-dynamic 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 container created for reuse: 
+\f1\fs22 \cf3 \cb0 \CocoaLigature0  flamboyant_curran 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker restart flamboyant_curran 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 \cf0 \
 \

@@ -1,0 +1,15 @@
+{
+  "name": "res-dynamic-site",
+  "version": "1.0.0",
+  "description": "dynamic site for the res course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Max Caduff",
+  "license": "ISC",
+  "dependencies": {
+    "chance": "^1.0.16",
+    "express": "^4.16.3"
+  }
+}
