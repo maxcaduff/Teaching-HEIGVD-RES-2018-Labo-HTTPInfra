@@ -69,8 +69,37 @@ conf under:
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker restart flamboyant_curran 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
-\cf0 \
+\cf0 access site: {\field{\*\fldinst{HYPERLINK "http://demo.res.ch:3456/hire"}}{\fldrslt http://demo.res.ch:3456/hire}} \
 \
+3:\
+start both containers without port mapping:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name staticSrv res18/1-static 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name dynamicSrv res18/2-dynamic
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 inspect adresses:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker inspect staticSrv |grep -i ipaddress 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker inspect dynamicSrv |grep -i ipaddress 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 create conf files and dockerfile with right adresses\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker build -t res18/3-rp docker-images/3-reverse-proxy/ 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1  \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -p 4567:80 res18/3-rp 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
 \
 \
 \
