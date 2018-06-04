@@ -1,15 +1,32 @@
 #!/bin/bash
-# this script should be called with 2 arguments, the first being the static ip and the second being the dynamic ip. (should include ports.)
+# this script should be called with 2 or more arguments, the first being the dynamic container's ip and the next ones being the statics container's ip. (should include ports.)
 
-echo "<VirtualHost *:80>
+
+echo "<Proxy balancer://staticCluster>
+" > txt
+for ((i=2;i<=$#;i++));
+do
+  eval echo "    BalancerMember http://\$$i" >> txt
+done
+
+echo "
+</Proxy>
+
+<VirtualHost *:80>
 
 	ServerName demo.res.ch
 
-	ProxyPass 		/hire/ http://$2/hire/
-	ProxyPassReverse	/hire/ http://$2/hire/
+	ProxyPass 		/hire/ http://$1/hire/
+	ProxyPassReverse	/hire/ http://$1/hire/
 
-	ProxyPass 		/ http://$1/
-	ProxyPassReverse 	/ http://$1/
-</VirtualHost>" > /etc/apache2/sites-available/001-reverse-proxy.conf
+	ProxyPass		/ balancer://staticCluster/
+	ProxyPassReverse 	/ balancer://staticCluster/
+
+</VirtualHost>" >> txt
+
+cat txt > /etc/apache2/sites-available/001-reverse-proxy.conf
+
+rm txt
 
 service apache2 reload
+
