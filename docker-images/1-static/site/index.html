@@ -22,7 +22,22 @@
 
     <!-- Custom styles for this template -->
     <link href="css/agency.min.css" rel="stylesheet">
-
+    
+      <!-- this function needs to be on top of the button that calls it. -->
+      <script>
+          function loadAnimals () {
+ 	          $.getJSON(  "/hire/",
+	           function (animals) {
+		          console.log(animals);
+		          var message = "Click to get a new pet!";
+		          if (animals.length > 0)  {
+		              message = animals[0];
+		          }
+		          $(".btn-xl").text(message);
+            });
+          };
+      </script> 
+   
   </head>
 
   <body id="page-top">
@@ -63,7 +78,7 @@
         <div class="intro-text">
           <div class="intro-lead-in">Welcome to the 1st lab part!</div>
           <div class="intro-heading text-uppercase">I hope you enjoy it.</div>
-          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">This button is useless!</a>
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" onclick="loadAnimals()">Click to hire a pet!</a>
         </div>
       </div>
     </header>
@@ -708,6 +723,11 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/agency.min.js"></script>
+      
+    <!-- Custom script for this lab -->
+    <script src="js/hireAnimals.js"></script>
+
+            
 
   </body>
 

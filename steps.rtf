@@ -78,7 +78,7 @@ start both containers without port mapping:\
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name staticSrv res18/1-static 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1 \
 
-\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name dynamicSrv res18/2-dynamic
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name dynamicSrv res18/2-dynamic 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 \cf0 inspect adresses:\
@@ -99,10 +99,30 @@ start both containers without port mapping:\
 \f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -p 4567:80 res18/3-rp 
 \f0\fs24 \cf0 \cb1 \CocoaLigature1 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 access site: {\field{\*\fldinst{HYPERLINK "http://demo.res.ch:4567/"}}{\fldrslt http://demo.res.ch:4567/}}   and  {\field{\*\fldinst{HYPERLINK "http://demo.res.ch:4567/hire/"}}{\fldrslt http://demo.res.ch:4567/hire/}}\
+\
+\
+4:\
+modify index.html and create script on static site\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker build -t res18/4-ajax-on-static docker-images/1-static/ 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name staticAjaxSrv res18/4-ajax-on-static 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 relaunch dynam: 
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker restart dynamicSrv 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+relaunch rp:        
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker restart upbeat_perlman 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 access site: {\field{\*\fldinst{HYPERLINK "http://demo.res.ch:4567/"}}{\fldrslt http://demo.res.ch:4567/}}   \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 \cf0 \
-\
-\
-\
 \
 \
 \
