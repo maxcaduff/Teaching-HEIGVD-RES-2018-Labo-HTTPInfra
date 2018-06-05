@@ -149,7 +149,8 @@ Rebuild image and run it:\
 \
 6:\
 modified script on reverse proxy to create load-balancing clusters. The script should be launched with the first arg being the dynamic container's address, and all the following addresses are the ones from static containers. So, the number of servers in the cluster can be modified on the fly, without having to kill the RP container.\
-modified Dockerfile to enable  proxy_balancer and lbmethod_byrequests, modify static site to display container ip.\
+modified the Dockerfile of RP to enable proxy_balancer and lbmethod_byrequests\
+modified static site to display container ip.\
 Build and run:\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
@@ -178,6 +179,22 @@ Build and run:\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 \cf0 \
 \
+still needed: modify dynam. srv to send ip address in json, create multiple dynamic containers, and create cluster in RP (modify script: need arg to count stat or dyna srv)\
+\
+7:\
+modified script to add header defining cookies and route + module headers in dockerfile of RP.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker build -t res18/7-rp-lb-sticky docker-images/3-reverse-proxy/ 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker run -d --name dynamicRP-LB-sticky -p 4567:80 res18/7-rp-lb-sticky 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+
+\f1\fs22 \cf2 \cb0 \CocoaLigature0  \cf3 docker exec -it dynamicRP-LB-sticky /bin/changeAddresses.sh 172.17.0.2:3000 172.17.0.3:80 172.17.0.5:80 172.17.0.4:80 
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
 \
 \
 \
