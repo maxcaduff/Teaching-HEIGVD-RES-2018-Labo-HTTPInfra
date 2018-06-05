@@ -1,25 +1,35 @@
 #!/bin/bash
-# this script should be called with 2 or more arguments, the first being the dynamic container's ip and the next ones being the statics container's ip. (should include ports.)
+# this script should be called with 3 or more arguments, the firsts being the static container's ips, followed by the dynamic container's ips (should include ports). The last argument is the number of static servers, the other half being deduced from the args num.
 
 
 echo 'Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 <Proxy balancer://staticCluster>
 ' > txt
-for ((i=2;i<=$#;i++));
+for ((i=1;i<= ${!#};i++));
 do
-  eval echo "	BalancerMember http://\$$i route=\$(($i-1))" >> txt
+  echo "	BalancerMember http://${!i} route=$i" >> txt
 done
 
 echo "
 	ProxySet stickysession=ROUTEID
 </Proxy>
 
+<Proxy balancer://dynamicCluster>
+" >> txt
+for ((i=$((${!#} + 1));i<$#;i++));
+do
+  echo "	BalancerMember http://${!i}" >> txt
+done
+
+echo "
+</Proxy>
+
 <VirtualHost *:80>
 
 	ServerName demo.res.ch
 
-	ProxyPass 		/hire/ http://$1/hire/
-	ProxyPassReverse	/hire/ http://$1/hire/
+	ProxyPass 		/hire/ balancer://dynamicCluster/hire/
+	ProxyPassReverse	/hire/ balancer://dynamicCluster/hire/
 
 	ProxyPass		/ balancer://staticCluster/
 	ProxyPassReverse 	/ balancer://staticCluster/
@@ -31,4 +41,5 @@ cat txt > /etc/apache2/sites-available/001-reverse-proxy.conf
 rm txt
 
 service apache2 reload
+
 
