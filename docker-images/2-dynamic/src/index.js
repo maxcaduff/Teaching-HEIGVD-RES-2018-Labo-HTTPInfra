@@ -3,8 +3,10 @@ var chance = new Chance();
 
 var express = require('express');
 var app = express();
+var ip;
 
 app.get('/hire', function(req,res) {
+	ip = req.connection.localAddress;
 	res.send(generateEmployees());
 });
 
@@ -22,7 +24,7 @@ function generateEmployees(){
 	var employees = [];
 	for(var i = 0; i < numberOfEmployees; i++){
 		var employee = chance.animal() + ", " + chance.profession()
-			+ " from " + chance.country({ full: true });
+			+ " from " + chance.country({ full: true }) + " srv: " + ip
 		employees.push(employee);
 		};
 	
