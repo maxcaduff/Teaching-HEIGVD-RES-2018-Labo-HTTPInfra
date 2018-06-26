@@ -8,28 +8,29 @@ ProxyRequests off
 # the DNS name that host can use to attempt our service
 ServerName demo.res.ch
 
+Header add Set-Cookie "ROUTE_ID=.%{BALANCER_WORKER_ROUTE}e; path=/hire" env=BALANCER_ROUTE_CHANGED
 
 #define the dynamic server
 <Proxy balancer://dynamic>
-BalancerMember http://$3/hire
-BalancerMember http://$4/hire
+BalancerMember http://$3/hire route=1
+BalancerMember http://$4/hire route=2
 Order allow,deny
 Allow from all
 
 #
-ProxySet lbmethod=byrequests
+ProxySet lbmethod=byrequests stickysession=ROUTE_ID
 </Proxy>
 
 
-
+Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 #Define the static server (un cluster: un grap de serveur)
 <Proxy balancer://static_app>
-BalancerMember http://$1/
-BalancerMember http://$2/
+BalancerMember http://$1/ route=s1
+BalancerMember http://$2/ route=s2
 
 Order allow,deny
 Allow from all
-ProxySet lbmethod=byrequests
+ProxySet lbmethod=byrequests stickysession=ROUTEID
 </Proxy>
 
 # handle the dynamic content provides by dockerised express
@@ -38,10 +39,6 @@ ProxyPass '/hire' balancer://dynamic
 
 # outbound : HTTP response back to the client
 ProxyPassReverse '/hire' balancer://dynamic
-
-
-ProxyPass             '/manager' http://$5/
-ProxyPassReverse     '/manager' http://$5/
 
 #  Handle the static content provides by dockerised apache static
 ProxyPass '/'  balancer://static_app/
