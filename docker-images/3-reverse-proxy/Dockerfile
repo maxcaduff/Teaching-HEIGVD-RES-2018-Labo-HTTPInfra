@@ -3,8 +3,10 @@ FROM php:7.0-apache
 COPY conf/ /etc/apache2/
 COPY changeAddresses-stickySession.sh /bin/
 
+
 #Enable load balancer round-robin
 RUN a2enmod proxy_balancer lbmethod_byrequests
+
 
 #Enable the laod balancer
 RUN a2enmod proxy_balancer
